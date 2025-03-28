@@ -1,0 +1,67 @@
+// Server
+hostname = "My Server Name";
+maxPlayers = 20;
+persistent = 1;
+
+// Dev
+// verifySignatures = 0;
+// BattlEye = 0;
+// loopback = true;
+// allowedFilePatching = 2;
+// kickDuplicate = 0;
+
+// Prod
+verifySignatures = 2;
+BattlEye = 1;
+loopback = false;
+allowedFilePatching = 0;
+kickDuplicate = 1;
+
+// Admin
+admins[] = {"1234567890abcdefg"}; // Steam ID
+passwordAdmin = "asdf";
+serverCommandPassword = "asdf";
+
+// Logging
+logFile = "server_console.log";
+timeStampFormat = "full";
+
+// VON
+disableVoN = 1;
+vonCodec = 1;
+vonCodecQuality = 30;
+disableChannels[] = {
+    {0, false, true},
+    {1, false, true},
+    {2, false, true},
+    {3, false, true},
+    {4, false, true},
+    {5, false, true},
+};
+
+// Missions
+forcedDifficulty = "Veteran";
+
+// Disconnects
+// maxPing= 200;
+// maxPacketLoss= 50;
+// maxDesync = 150;
+// disconnectTimeout = 90;
+// kickClientsOnSlowNetwork[] = { 0, 0, 0, 0 };
+// kickTimeout[] = { {0, -1}, {1, 0}, {2, 0}, {3, 0} };
+
+// Voting
+// votingTimeOut = 20;
+// roleTimeOut = 30;
+// briefingTimeOut = 30;
+// debriefingTimeOut = 30;
+// lobbyIdleTimeout = 30;
+
+// Events
+onUnsignedData = "kick (_this select 0)";
+onHackedData = "kick (_this select 0)";
+
+// File loading
+allowedLoadFileExtensions[] = {"b64","hpp","sqs","sqf","fsm","cpp","paa","txt","xml","inc","ext","sqm","ods","fxy","lip","csv","kb","bik","bikb","html","htm","biedi"};
+allowedPreprocessFileExtensions[] = {"b64","hpp","sqs","sqf","fsm","cpp","paa","txt","xml","inc","ext","sqm","ods","fxy","lip","csv","kb","bik","bikb","html","htm","biedi"};
+allowedHTMLLoadExtensions[] = {"htm","html","xml","txt"};

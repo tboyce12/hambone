@@ -1,0 +1,10 @@
+docker-run docker-run-fast docker-shell: my-docker-userdata
+
+my-docker-userdata:
+	mkdir -p docker/userdata/mods
+	rsync -a --delete --exclude=".git"	\
+		"/path/to/jib/"			\
+		"docker/userdata/mods/jib/"
+	rsync -a --delete --exclude=".git"	\
+		"/path/to/jib_marker/"		\
+		"docker/userdata/mods/jib_marker/"

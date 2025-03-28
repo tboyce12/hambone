@@ -1,0 +1,32 @@
+# Ignore version control directories and files
+.git
+.gitignore
+
+# Ignore node modules and dependencies
+node_modules/
+bower_components/
+
+# Ignore build outputs and temporary files
+dist/
+build/
+*.log
+*.tmp
+
+# Ignore operating system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore sensitive files
+.env
+*.pem
+*.key
+*.crt
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Ignore example files
+*.example

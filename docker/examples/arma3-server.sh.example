@@ -1,0 +1,14 @@
+#!/bin/bash
+/data/arma3server                               \
+    -par=arma.par                               \
+    -name=Server                                \
+    -config=server.cfg                          \
+    -profiles=profiles                          \
+    -noSplash                                   \
+    -noPause                                    \
+    -showScriptErrors                           \
+    -checkSignatures                            \
+    -debug                                      \
+    -filePatching                               \
+    -cpuCount=2                                 \
+    -port=2302

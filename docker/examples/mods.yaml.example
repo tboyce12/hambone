@@ -1,0 +1,15 @@
+mod:
+  - name: "@CBA_A3"
+    id: "450814997"
+  - name: "@ace"
+    id: "463939057"
+  - name: "jib"
+    path: "jib"
+  - name: "jib_marker"
+    path: "jib_marker"
+serverMod:
+  - name: "@Advanced Rappelling"
+    id: "713709341"
+key:
+  - name: "@Turret Enhanced"
+    id: "1623498241"

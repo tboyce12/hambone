@@ -1,0 +1,31 @@
+services:
+  hambone: &hambone
+    image: hambone
+    env_file:
+      - docker-compose.env
+    ports:
+      - "2302:2302"
+      - "2303:2303"
+      - "2304:2304"
+      - "2305:2305"
+      - "2306:2306"
+    volumes:
+      - /mnt/data/containerdata:/data
+      - /mnt/data/userdata:/userdata
+
+  hambone_fast:
+    <<: *hambone
+    command: ["-f"]
+
+  hambone_shell:
+    <<: *hambone
+    entrypoint: ["bash"]
+
+  teamspeak:
+    image: teamspeak
+    environment:
+      - TS3SERVER_LICENSE=accept
+    ports:
+      - "9987:9987/udp"
+      - "10011:10011"
+      - "30033:30033"
