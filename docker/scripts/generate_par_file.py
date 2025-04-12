@@ -9,11 +9,11 @@ def generate_par_file(yaml_file, mods_dir):
 
     mods = "".join([
         f'{os.path.join(mods_dir, mod["name"])};'.lower()
-        for mod in data["mod"]
+        for mod in data.get("mod", [])
     ])
     server_mods = "".join([
         f'{os.path.join(mods_dir, mod["name"])};'.lower()
-        for mod in data["serverMod"]
+        for mod in data.get("serverMod", [])
     ])
     output = (
         'class Arg {\n'
