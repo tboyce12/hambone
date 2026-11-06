@@ -1,6 +1,10 @@
 services:
   hambone: &hambone
-    build: .
+    build:
+      context: .
+      args:
+        SERVER_UID: ${SERVER_UID}
+        SERVER_GID: ${SERVER_GID}
     env_file:
       - docker-compose.env
     ports:

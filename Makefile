@@ -3,16 +3,23 @@ status: cfn-status
 docker-build:
 	docker pull "steamcmd/steamcmd:alpine"
 	docker pull teamspeak
-	cd docker && docker compose build hambone
+	cd docker &&					\
+	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g) docker compose build
 
 docker-shell:
-	cd docker && docker compose run --rm hambone_shell
+	cd docker &&					\
+	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
+	docker compose run --build --rm hambone_shell
 
 docker-run:
-	cd docker && docker compose up hambone teamspeak
+	cd docker &&					\
+	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
+	docker compose up --build hambone teamspeak
 
 docker-run-fast:
-	cd docker && docker compose up hambone_fast teamspeak
+	cd docker &&					\
+	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
+	docker compose up --build hambone_fast teamspeak
 
 docker-push:
 	aws ecr get-login-password \

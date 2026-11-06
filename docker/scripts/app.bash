@@ -32,6 +32,7 @@ path_mods_yaml=/userdata/server/mods.yaml
 source ~/.venv/bin/activate
 
 # Run steamcmd
+echo "hambone: Running Steamcmd..."
 if [ -z $fast_mode ]; then
     python generate_steamcmd_script.py          \
            $path_mods_yaml $dir_data             \
@@ -42,6 +43,7 @@ if [ -z $fast_mode ]; then
 fi
 
 # Gather mods
+echo "hambone: Gathering mods..."
 rm -rf $dir_mods
 mkdir -p $dir_mods
 python get_mod_ids.py $path_mods_yaml | \
@@ -54,6 +56,7 @@ python get_mod_paths.py $path_mods_yaml | \
     done
 
 # Gather keys
+echo "hambone: Gathering keys..."
 if [ ! -d $dir_keys_vanilla ]; then
     cp -r $dir_keys $dir_keys_vanilla
 fi
@@ -61,20 +64,22 @@ rm -rf $dir_keys
 cp -r $dir_keys_vanilla $dir_keys
 python get_mod_ids.py $path_mods_yaml | \
     while read id name; do
-        find -L $dir_mods/"$name"/key* -iname "*.bikey" -exec \
+        find -L $dir_mods/"$name" -iname "*.bikey" -exec \
              cp {} $dir_keys/ \;
     done
 python get_mod_paths.py $path_mods_yaml | \
     while read path name; do
-        find -L $dir_mods/"$name"/key* -iname "*.bikey" -exec \
+        find -L $dir_mods/"$name" -iname "*.bikey" -exec \
              cp {} $dir_keys/ \;
     done
 
 # Lowercase files
+echo "hambone: Lowercasing files..."
 ./lowercase-file-paths.bash $dir_mods
 ./lowercase-file-paths.bash $dir_keys
 
 # Gather server files
+echo "hambone: Gathering server files..."
 python generate_par_file.py $path_mods_yaml mods > $dir_data/arma.par
 cp $dir_userdata_server/server.cfg $dir_data/server.cfg
 cp $dir_userdata_server/arma3-server.sh $dir_data/arma3-server.sh
@@ -90,5 +95,6 @@ then
 fi
 
 # Run arma server
+echo "hambone: Running arma server..."
 cd $dir_data
 ./arma3-server.sh
