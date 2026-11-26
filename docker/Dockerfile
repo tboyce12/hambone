@@ -18,7 +18,7 @@ VOLUME /data
 USER server
 ENV HOME=/home/server
 WORKDIR /home/server
-COPY scripts /home/server
+COPY --chown=server:server scripts /home/server
 
 # Venv
 RUN python3 -m venv .venv                       \
