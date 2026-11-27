@@ -6,6 +6,11 @@ docker-build:
 	cd docker &&					\
 	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g) docker compose build
 
+docker-hambone:
+	cd docker &&					\
+	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
+	docker compose --ansi never run --build --rm hambone
+
 docker-shell:
 	cd docker &&					\
 	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
