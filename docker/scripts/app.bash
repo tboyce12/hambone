@@ -13,20 +13,9 @@ while getopts "f" opt; do
 done
 
 # Variables
-dir_data=/data
-dir_userdata=/userdata
-dir_userdata_mods=/userdata/mods
-dir_userdata_mpmissions=/userdata/mpmissions
-dir_userdata_profiles=/userdata/profiles
-dir_userdata_server=/userdata/server
-dir_home=/home/server
-dir_keys=/data/keys
-dir_keys_vanilla=/data/keys-vanilla
-dir_mods=/data/mods
 dir_workshop=/data/steamapps/workshop/content/107410
 id_game=107410
 id_server=233780
-path_mods_yaml=/userdata/server/mods.yaml
 
 # Activate python venv
 source ~/.venv/bin/activate
@@ -34,67 +23,67 @@ source ~/.venv/bin/activate
 # Run steamcmd
 echo "hambone: Running Steamcmd..."
 if [ -z $fast_mode ]; then
-    python generate_steamcmd_script.py          \
-           $path_mods_yaml $dir_data             \
-           $id_server $id_game                  \
-           "$STEAM_USERNAME" "$STEAM_PASSWORD"  \
-           > $dir_home/steamcmd.txt
-    /usr/bin/steamcmd +runscript $dir_home/steamcmd.txt
+    python generate_steamcmd_script.py         \
+           /userdata/server/mods.yaml /data    \
+           $id_server $id_game                 \
+           "$STEAM_USERNAME" "$STEAM_PASSWORD" \
+           > /home/server/steamcmd.txt
+    /usr/bin/steamcmd +runscript /home/server/steamcmd.txt
 fi
 
 # Gather mods
 echo "hambone: Gathering mods..."
-rm -rf $dir_mods
-mkdir -p $dir_mods
-python get_mod_ids.py $path_mods_yaml | \
+rm -rf /data/mods
+mkdir -p /data/mods
+python get_mod_ids.py /userdata/server/mods.yaml | \
     while read id name; do
-        ln -s $dir_workshop/"$id" $dir_mods/"$name"
+        ln -s $dir_workshop/"$id" /data/mods/"$name"
     done
-python get_mod_paths.py $path_mods_yaml | \
+python get_mod_paths.py /userdata/server/mods.yaml | \
     while read path name; do
-        cp -r $dir_userdata_mods/"$path" $dir_mods/"$name"
+        cp -r /userdata/mods/"$path" /data/mods/"$name"
     done
 
 # Gather keys
 echo "hambone: Gathering keys..."
-if [ ! -d $dir_keys_vanilla ]; then
-    cp -r $dir_keys $dir_keys_vanilla
+if [ ! -d /data/keys-vanilla ]; then
+    cp -r /data/keys /data/keys-vanilla
 fi
-rm -rf $dir_keys
-cp -r $dir_keys_vanilla $dir_keys
-python get_mod_ids.py $path_mods_yaml | \
+rm -rf /data/keys
+cp -r /data/keys-vanilla /data/keys
+python get_mod_ids.py /userdata/server/mods.yaml | \
     while read id name; do
-        find -L $dir_mods/"$name" -iname "*.bikey" -exec \
-             cp {} $dir_keys/ \;
+        find -L /data/mods/"$name" -iname "*.bikey" -exec \
+             cp {} /data/keys/ \;
     done
-python get_mod_paths.py $path_mods_yaml | \
+python get_mod_paths.py /userdata/server/mods.yaml | \
     while read path name; do
-        find -L $dir_mods/"$name" -iname "*.bikey" -exec \
-             cp {} $dir_keys/ \;
+        find -L /data/mods/"$name" -iname "*.bikey" -exec \
+             cp {} /data/keys/ \;
     done
 
 # Lowercase files
 echo "hambone: Lowercasing files..."
-./lowercase-file-paths.bash $dir_mods
-./lowercase-file-paths.bash $dir_keys
+./lowercase-file-paths.bash /data/mods
+./lowercase-file-paths.bash /data/keys
 
 # Gather server files
 echo "hambone: Gathering server files..."
-python generate_par_file.py $path_mods_yaml mods > $dir_data/arma.par
-cp $dir_userdata_server/server.cfg $dir_data/server.cfg
-cp $dir_userdata_server/arma3-server.sh $dir_data/arma3-server.sh
-if [ -d $dir_userdata_profiles ] && [ "$(ls -A $dir_userdata_profiles)" ]
+python generate_par_file.py /userdata/server/mods.yaml mods > /data/arma.par
+cp /userdata/server/server.cfg /data/server.cfg
+cp /userdata/server/arma3-server.sh /data/arma3-server.sh
+if [ -d /userdata/profiles ] && [ "$(ls -A /userdata/profiles)" ]
 then
-    mkdir -p $dir_data/profiles/home
-    cp -r $dir_userdata_profiles/* $dir_data/profiles/home/
+    mkdir -p /data/profiles/home
+    cp -r /userdata/profiles/* /data/profiles/home/
 fi
-if [ -d $dir_userdata_mpmissions ] && [ "$(ls -A $dir_userdata_mpmissions)" ]
+if [ -d /userdata/mpmissions ] && [ "$(ls -A /userdata/mpmissions)" ]
 then
-    mkdir -p $dir_data/mpmissions
-    cp -r $dir_userdata_mpmissions/* $dir_data/mpmissions/
+    mkdir -p /data/mpmissions
+    cp -r /userdata/mpmissions/* /data/mpmissions/
 fi
 
 # Run arma server
 echo "hambone: Running arma server..."
-cd $dir_data
+cd /data
 ./arma3-server.sh
