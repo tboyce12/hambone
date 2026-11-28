@@ -22,7 +22,7 @@ source ~/.venv/bin/activate
 
 # Run steamcmd
 echo "hambone: Running Steamcmd..."
-if [ -z $fast_mode ]; then
+if [ -z "$fast_mode" ] || [ ! -f /data/arma3server_x64 ]; then
     python generate_steamcmd_script.py         \
            /userdata/server/mods.yaml /data    \
            $id_server $id_game                 \
