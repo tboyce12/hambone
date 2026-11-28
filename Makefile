@@ -1,27 +1,32 @@
 status: cfn-status
 
-docker-build:
+docker-build: docker-ensure-bind-mounts
 	docker pull "steamcmd/steamcmd:alpine"
 	docker pull teamspeak
 	cd docker &&					\
 	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g) docker compose build
 
-docker-hambone:
+docker-clean:
+	cd docker &&                                    \
+	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)       \
+	docker compose down --rmi all --remove-orphans
+
+docker-hambone-fast: docker-ensure-bind-mounts
 	cd docker &&					\
 	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
-	docker compose --ansi never run --build --rm hambone
+	docker compose up --build hambone_fast
 
-docker-shell:
+docker-shell: docker-ensure-bind-mounts
 	cd docker &&					\
 	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
-	docker compose run --build --rm hambone_shell
+	docker compose run --build --rm --service-ports hambone_shell
 
-docker-run:
+docker-run: docker-ensure-bind-mounts
 	cd docker &&					\
 	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
 	docker compose up --build hambone teamspeak
 
-docker-run-fast:
+docker-run-fast: docker-ensure-bind-mounts
 	cd docker &&					\
 	SERVER_UID=$$(id -u) SERVER_GID=$$(id -g)	\
 	docker compose up --build hambone_fast teamspeak
@@ -33,6 +38,14 @@ docker-push:
 	docker tag "hambone" "$(ECR_REGISTRY)/hambone"
 	docker push "$(ECR_REGISTRY)/hambone"
 	docker logout
+
+docker-ensure-bind-mounts:
+	mkdir -p				\
+		docker/containerdata		\
+		docker/userdata/mods		\
+		docker/userdata/mpmissions	\
+		docker/userdata/profiles	\
+		docker/userdata/server
 
 cfn-create:
 	@. cloudformation/cloudformation.env &&				  \
